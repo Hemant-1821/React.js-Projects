@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import classes from'./App.css';  
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../HOC/WithClass';
 
 class App extends Component {
+  constructor(props){
+    super();
+    console.log('[App.js] Constructor');
+  }
+
   state = {
     persons: [
       { id: 'fjdn1', name: 'Hemant', age: 28 },
@@ -13,6 +19,25 @@ class App extends Component {
     otherState: 'some other value',
     showPersons: false,
   }
+
+  static getDerivedStateFromProps(props, state)
+  {
+    console.log('[App.js] getDerviedStateFromProps');
+    return state;
+  }
+
+  componentDidMount(){
+    console.log('[App.js] componentDidMount');
+  }
+
+  shouldComponentUpdate(nextProps, nextState){
+    console.log('[App.js] shouldComponentUpdate');
+    return true;
+  }
+
+  // componentDidUpdate() {
+  //   console.log('[App.js] componentDidUpdate');
+  // }
 
   nameChangedHandler = ( event, id ) => {
     const personIndex = this.state.persons.findIndex(p => {
@@ -42,6 +67,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('[App.js] render');
     let persons = null;
 
     if ( this.state.showPersons ) {
@@ -53,14 +79,15 @@ class App extends Component {
     }
 
     return (
-      <div className={ classes.App }>
+      <WithClass classes={ classes.App }>
         <Cockpit
+          title={this.props.appTitle}
           showPersons = {this.state.showPersons}
           persons = {this.state.persons}
           clicked = {this.togglePersonsHandler}
         />          
         {persons}
-      </div>
+      </WithClass>
     );
   }
 }
